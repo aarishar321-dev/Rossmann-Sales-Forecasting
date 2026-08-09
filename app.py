@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-
+st.write("APP STARTED")
 # ============================================================
 # PAGE CONFIGURATION
 # ============================================================
@@ -174,8 +174,7 @@ def load_model():
     return model, preprocessor
 
 
-with st.spinner("Loading the forecasting model..."):
-    model, preprocessor = load_model()
+st.write("Reached before model loading")
 
 
 # ============================================================
