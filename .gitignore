@@ -11,9 +11,6 @@ venv/
 # Jupyter
 .ipynb_checkpoints/
 
-# Large model artifacts
-models/*.pkl
-
 # Dataset files
 data/*.csv
 
