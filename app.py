@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-st.write("APP STARTED")
+
 # ============================================================
 # PAGE CONFIGURATION
 # ============================================================
@@ -13,7 +13,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
-
+st.write("APP STARTED")
 
 # ============================================================
 # CUSTOM STYLING
