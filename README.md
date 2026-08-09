@@ -1,22 +1,22 @@
-# Rossmann Store Sales Forecasting
+**# Rossmann Store Sales Forecasting**
 
-> An end-to-end time-series machine learning project that started as a forecasting exercise and turned into a real lesson in model selection, time-aware validation, feature engineering, and deployment engineering.
+\> An end-to-end time-series machine learning project that started as a forecasting exercise and turned into a real lesson in model selection, time-aware validation, feature engineering, and deployment engineering.
 
-## Project Overview
+**## Project Overview**
 
-This project uses the **Rossmann Store Sales** dataset to build a machine learning system that predicts daily sales for individual stores.
+This project uses the **\*\*Rossmann Store Sales\*\*** dataset to build a machine learning system that predicts daily sales for individual stores.
 
 The goal was not simply to train a model and report a metric. I wanted to understand the complete workflow:
 
-**data → features → forecasting strategy → model comparison → evaluation → interpretation → future forecasting → deployment**
+**\*\*data → features → forecasting strategy → model comparison → evaluation → interpretation → future forecasting → deployment\*\***
 
-The final application is a Streamlit interface where a user can enter store and calendar information and receive an estimated daily sales value.
+The final application is a Streamlit interface where a user can enter store and calendar information and receive an estimated daily sales value. The deployed application uses the lightweight XGBoost model and its matching preprocessing pipeline.
 
-The selected forecasting model is a **forecast-ready Random Forest Regressor** with a holdout MAE of approximately **916.97**.
+The final **deployment model is a forecast-ready XGBoost Regressor** with a holdout MAE of approximately **\*\*1603.74\*\***. It was selected specifically for deployment because the higher-performing Random Forest was far too large and memory-intensive for the target hosting environment.
 
----
+**---**
 
-## Why This Project Matters
+**## Why This Project Matters**
 
 At first glance, sales forecasting looks like a normal regression problem.
 
@@ -26,122 +26,122 @@ The biggest constraint is that when predicting the future, the future Sales valu
 
 This project therefore separates:
 
-- features that are useful when historical Sales are available
-- features that are genuinely available at prediction time
+\- features that are useful when historical Sales are available
+\- features that are genuinely available at prediction time
 
 That distinction became one of the most important lessons from the project.
 
----
+**---**
 
-## What I Built
+**## What I Built**
 
 The project contains:
 
-- Exploratory Data Analysis
-- Date and calendar feature engineering
-- Historical Sales lag and rolling features for model experimentation
-- Chronological train/validation/test strategy
-- Baseline comparison
-- Linear Regression
-- Random Forest Regression
-- XGBoost Regression
-- MAE, RMSE, R² and MAPE evaluation
-- Feature importance analysis
-- Prediction error analysis
-- Hyperparameter tuning experiments
-- Forecast-ready feature engineering
-- Official Rossmann test-set forecasting
-- Prediction distribution analysis
-- Saved model and preprocessing pipeline
-- Streamlit prediction application
-- Deployment and model-size investigation
+\- Exploratory Data Analysis
+\- Date and calendar feature engineering
+\- Historical Sales lag and rolling features for model experimentation
+\- Chronological train/validation/test strategy
+\- Baseline comparison
+\- Linear Regression
+\- Random Forest Regression
+\- XGBoost Regression
+\- MAE, RMSE, R² and MAPE evaluation
+\- Feature importance analysis
+\- Prediction error analysis
+\- Hyperparameter tuning experiments
+\- Forecast-ready feature engineering
+\- Official Rossmann test-set forecasting
+\- Prediction distribution analysis
+\- Saved model and preprocessing pipeline
+\- Streamlit prediction application
+\- Deployment and model-size investigation
 
----
+**---**
 
-# Project Workflow
+**# Project Workflow**
 
-```text
+\`\`\`text
 Raw Rossmann Data
-        |
-        v
+        |
+        v
 Data Exploration
-        |
-        v
+        |
+        v
 Data Cleaning
-        |
-        v
+        |
+        v
 Date / Calendar Features
-        |
-        v
+        |
+        v
 Historical Feature Engineering
-        |
-        v
+        |
+        v
 Time-Based Train/Test Split
-        |
-        +----------------------+
-        |                      |
-        v                      v
-   Baseline Model        ML Model Comparison
-                               |
-                    +----------+----------+
-                    |          |          |
-                    v          v          v
-              Linear RF     XGBoost
-                    |
-                    v
-             Model Evaluation
-                    |
-                    v
-           Feature Importance
-                    |
-                    v
-             Error Analysis
-                    |
-                    v
-          Forecast-Safe Features
-                    |
-                    v
-        Forecast-Ready Random Forest
-                    |
-                    v
-        Official Future Predictions
-                    |
-                    v
-              Streamlit App
-```
+        |
+        +----------------------+
+        |                      |
+        v                      v
+   Baseline Model        ML Model Comparison
+                               |
+                    +----------+----------+
+                    |          |          |
+                    v          v          v
+              Linear RF     XGBoost
+                    |
+                    v
+             Model Evaluation
+                    |
+                    v
+           Feature Importance
+                    |
+                    v
+             Error Analysis
+                    |
+                    v
+          Forecast-Safe Features
+                    |
+                    v
+        Forecast-Ready Random Forest
+                    |
+                    v
+        Official Future Predictions
+                    |
+                    v
+              Streamlit App
+\`\`\`
 
----
+**---**
 
-# Feature Engineering
+**# Feature Engineering**
 
-Calendar features were created from the `Date` column:
+Calendar features were created from the \`Date\` column:
 
-- `Year`
-- `Month`
-- `Day`
-- `Week`
-- `Quarter`
-- `DayOfWeek`
-- `IsWeekend`
+\- \`Year\`
+\- \`Month\`
+\- \`Day\`
+\- \`Week\`
+\- \`Quarter\`
+\- \`DayOfWeek\`
+\- \`IsWeekend\`
 
 Additional historical Sales features were explored during model development:
 
-- `Sales_lag_1`
-- `Sales_lag_7`
-- `Sales_Rolling_7`
-- `Sales_Rolling_30`
+\- \`Sales\_lag\_1\`
+\- \`Sales\_lag\_7\`
+\- \`Sales\_Rolling\_7\`
+\- \`Sales\_Rolling\_30\`
 
 These historical Sales features were useful for understanding how much recent Sales history could improve predictions.
 
 However, they cannot be directly used when predicting genuinely unseen future dates unless the required previous Sales values are already available.
 
-That led to the creation of a separate **forecast-ready feature set**.
+That led to the creation of a separate **\*\*forecast-ready feature set\*\***.
 
-## Forecast-ready features
+**## Forecast-ready features**
 
 The final deployment-safe model uses only information that is available for the future prediction period:
 
-```text
+\`\`\`text
 Store
 DayOfWeek
 Open
@@ -154,105 +154,105 @@ Day
 Week
 Quarter
 IsWeekend
-```
+\`\`\`
 
 This was an important design decision because the final model should not depend on future Sales values.
 
----
+**---**
 
-# Model Comparison
+**# Model Comparison**
 
 Several models were evaluated during the project.
 
-| Model | Holdout MAE | Decision |
-|---|---:|---|
-| Baseline | 2846.78 | Reference |
-| Linear Regression | 996.20 | Not selected |
-| Original forecast-ready Random Forest | **916.97** | **Selected** |
-| Original RF with historical Sales features | 538.72 | Not directly future-safe |
-| XGBoost with historical Sales features | 548.38 | Not directly future-safe |
-| Tuned forecast-ready Random Forest | 1352.59 | Not selected |
-| Small deployment Random Forest | 1549.94 | Not selected |
-| Deployment XGBoost | 1603.74 | Not selected |
-| HistGradientBoosting | 1641.74 | Not selected |
+\| Model | Holdout MAE | Decision |
+\|---|---:|---|
+\| Baseline | 2846.78 | Reference |
+\| Linear Regression | 996.20 | Not selected |
+\| Original forecast-ready Random Forest | **\*\*916.97\*\*** | Best accuracy, but too large for deployment | |
+\| Original RF with historical Sales features | 538.72 | Not directly future-safe |
+\| XGBoost with historical Sales features | 548.38 | Not directly future-safe |
+\| Tuned forecast-ready Random Forest | 1352.59 | Not selected |
+\| Small deployment Random Forest | 1549.94 | Not selected |
+\| Deployment XGBoost | **\*\*1603.74\*\*** | **\*\*Selected for deployment\*\*** |
+\| HistGradientBoosting | 1641.74 | Not selected |
 
-### Final model decision
+**### Final model decision**
 
 The model with the lowest raw holdout MAE was not automatically selected.
 
 The Random Forest using historical Sales features achieved a much lower MAE, but those Sales-history features are not available in the same way for the official future prediction period.
 
-Therefore, the **forecast-ready Random Forest with MAE ≈ 916.97** was selected as the final forecasting model.
+Therefore, the **\*\*forecast-ready Random Forest with MAE ≈ 916.97\*\*** was selected as the final forecasting model.
 
 This was a deliberate trade-off between predictive performance and real forecasting usability.
 
----
+**---**
 
-# Evaluation
+**# Evaluation**
 
 The main evaluation metrics used were:
 
-### MAE — Mean Absolute Error
+**### MAE — Mean Absolute Error**
 
 Measures the average absolute difference between actual and predicted Sales.
 
 It was the main metric used for model comparison because it is easy to interpret in the original Sales scale.
 
-### RMSE — Root Mean Squared Error
+**### RMSE — Root Mean Squared Error**
 
 Penalizes larger errors more strongly than MAE.
 
-### R² — Coefficient of Determination
+**### R² — Coefficient of Determination**
 
 Measures how much of the variance in the target is explained by the model.
 
-### MAPE — Mean Absolute Percentage Error
+**### MAPE — Mean Absolute Percentage Error**
 
 Used as an additional relative-error measure, with zero-target observations handled separately.
 
----
+**---**
 
-# Feature Importance
+**# Feature Importance**
 
 Random Forest feature importance showed that the most influential features included:
 
-1. `Open`
-2. `Sales_Rolling_30`
-3. `Promo`
-4. `Sales_lag_1`
-5. `Sales_lag_7`
-6. `Day`
-7. `Week`
-8. `Sales_Rolling_7`
-9. `DayOfWeek`
-10. `Month`
+1\. \`Open\`
+2\. \`Sales\_Rolling\_30\`
+3\. \`Promo\`
+4\. \`Sales\_lag\_1\`
+5\. \`Sales\_lag\_7\`
+6\. \`Day\`
+7\. \`Week\`
+8\. \`Sales\_Rolling\_7\`
+9\. \`DayOfWeek\`
+10\. \`Month\`
 
 The result was useful because it showed how strongly store operating status and recent Sales history can influence forecasting when those historical features are available.
 
 For the final forecast-ready model, the feature set was restricted to variables that can actually be known for future dates.
 
----
+**---**
 
-# Error Analysis
+**# Error Analysis**
 
 Error analysis was used to inspect individual predictions instead of relying only on a single overall metric.
 
 The analysis compared:
 
-- Actual Sales
-- Predicted Sales
-- Error
-- Absolute Error
+\- Actual Sales
+\- Predicted Sales
+\- Error
+\- Absolute Error
 
 This made it possible to see where the model was underpredicting or overpredicting and helped move the project from simply reporting a score toward understanding model behaviour.
 
----
+**---**
 
-# Hyperparameter Tuning: What I Learned
+**# Hyperparameter Tuning: What I Learned**
 
 Hyperparameter tuning did not automatically make the model better.
 
-An initial `RandomizedSearchCV` experiment produced a cross-validation MAE of approximately **1391.84**, which was substantially worse than the **916.97** holdout MAE of the selected forecast-ready Random Forest.
+An initial \`RandomizedSearchCV\` experiment produced a cross-validation MAE of approximately **\*\*1391.84\*\***, which was substantially worse than the **\*\*916.97\*\*** holdout MAE of the selected forecast-ready Random Forest.
 
 More importantly, ordinary cross-validation is not the right validation strategy for a time-dependent forecasting problem because the chronological order of observations matters.
 
@@ -260,15 +260,15 @@ A later observation should not be allowed to influence the validation of an earl
 
 I therefore investigated chronological tuning using a separate tuning-training and later validation period.
 
-The tuned configuration still did not improve performance on the untouched holdout, producing a final MAE of approximately **1352.59**.
+The tuned configuration still did not improve performance on the untouched holdout, producing a final MAE of approximately **\*\*1352.59\*\***.
 
 The lesson was simple:
 
-> **Hyperparameter tuning is not automatically an improvement. The validation strategy has to match the real problem.**
+\> **\*\*Hyperparameter tuning is not automatically an improvement. The validation strategy has to match the real problem.\*\***
 
----
+**---**
 
-# The Deployment Challenge
+**# The Deployment Challenge**
 
 This was probably the most unexpected part of the project.
 
@@ -276,221 +276,227 @@ After selecting the forecast-ready Random Forest, I saved the trained model usin
 
 The result was approximately:
 
-```text
+\`\`\`text
 Original model size: 6.42 GB
-```
+\`\`\`
 
 That is far too large for a normal GitHub-based deployment workflow.
 
 So instead of immediately accepting the problem, I treated it as another engineering experiment.
 
-### Experiment 1 — Smaller Random Forest
+**### Experiment 1 — Smaller Random Forest**
 
 A smaller Random Forest was trained using:
 
-```text
-n_estimators = 50
-max_depth = 20
-```
+\`\`\`text
+n\_estimators = 50
+max\_depth = 20
+\`\`\`
 
 Result:
 
-```text
+\`\`\`text
 MAE ≈ 1549.94
-```
+\`\`\`
 
 The model was smaller, but the accuracy loss was too large.
 
-### Experiment 2 — Deployment XGBoost
+**### Experiment 2 — Deployment XGBoost**
 
 A future-safe XGBoost model was tested.
 
 Result:
 
-```text
+\`\`\`text
 MAE ≈ 1603.74
-```
+\`\`\`
 
 Again, it was not competitive with the selected Random Forest.
 
-### Experiment 3 — HistGradientBoosting
+**### Experiment 3 — HistGradientBoosting**
 
 A compact histogram-based gradient boosting model was also tested.
 
 Result:
 
-```text
+\`\`\`text
 MAE ≈ 1641.74
-```
+\`\`\`
 
 It was also rejected.
 
-### Experiment 4 — Model Compression
+**### Experiment 4 — Model Compression**
 
 Instead of changing the model, I tried compressing the original Random Forest with Joblib.
 
 The result was:
 
-```text
-6.42 GB  →  1.17 GB
-```
+\`\`\`text
+6.42 GB  →  1.17 GB
+\`\`\`
 
 That was a major reduction while preserving the same trained estimator.
 
 However, attempting to reload the compressed model in the notebook caused the kernel to restart, showing that the compressed disk size did not eliminate the memory pressure involved in deserializing the model.
 
+At this point, the lightweight XGBoost model became the more practical deployment choice.
+
 This became another important lesson:
 
-> **A smaller file on disk does not necessarily mean a lightweight model at runtime.**
+\> **\*\*A smaller file on disk does not necessarily mean a lightweight model at runtime.\*\***
 
----
+**---**
 
-# Deployment Environment Challenge
+**# Deployment Environment Challenge**
 
 When the model was moved from the notebook environment to a local Streamlit environment, another issue appeared.
 
 The saved preprocessing pipeline had been created with:
 
-```text
+\`\`\`text
 scikit-learn 1.6.1
-```
+\`\`\`
 
 while the local environment initially used:
 
-```text
+\`\`\`text
 scikit-learn 1.7.2
-```
+\`\`\`
 
-This produced an `_RemainderColsList` unpickling error.
+This produced an \`\_RemainderColsList\` unpickling error.
 
 The issue was fixed by using the same scikit-learn version as the training environment:
 
-```text
+\`\`\`text
 scikit-learn==1.6.1
-```
+\`\`\`
 
 The preprocessor and compressed Random Forest then loaded successfully.
 
 This reinforced another practical ML lesson:
 
-> **Reproducible environments matter. A saved model is tied to the software environment that created it.**
+\> **\*\*Reproducible environments matter. A saved model is tied to the software environment that created it.\*\***
 
----
+**---**
 
-# Streamlit Application
+**# Streamlit Application**
 
 The final model was integrated into a Streamlit application.
 
 The application allows a user to enter:
 
-- Store ID
-- Forecast Date
-- Day of Week
-- Store status
-- Promotion status
-- State Holiday
-- School Holiday
+\- Store ID
+\- Forecast Date
+\- Day of Week
+\- Store status
+\- Promotion status
+\- State Holiday
+\- School Holiday
 
-The app then generates the same calendar features used during training, applies the saved preprocessing pipeline, and passes the processed data to the saved Random Forest model.
+The app then generates the same calendar features used during training, applies the saved preprocessing pipeline, and passes the processed data to the saved XGBoost model.
 
-The application returns an estimated daily Sales value.
+The application converts the user inputs into **12 forecast-safe input features**. The saved preprocessing pipeline expands the categorical `StateHoliday` feature, producing **15 processed features** for the XGBoost model.
+
+The application then returns an estimated daily Sales value.
 
 The application was successfully tested locally.
 
----
+**---**
 
-# Project Structure
+**# Project Structure**
 
-```text
-Rossmann_Sales_Forecasting/
+\`\`\`text
+Rossmann\_Sales\_Forecasting/
 │
 ├── data/
-│   ├── train.csv
-│   └── test.csv
+│   ├── train.csv
+│   └── test.csv
 │
 ├── models/
-│   ├── forecast_preprocessor.pkl
-│   └── forecast_rf_model_compressed.pkl
+│   ├── forecast\_preprocessor.pkl
+│   └── forecast\_rf\_model\_compressed.pkl
 │
 ├── notebook/
-│   └── sales-forecasting.ipynb
+│   └── sales-forecasting.ipynb
 │
 ├── app.py
 ├── requirements.txt
 ├── README.md
 └── LICENSE
-```
+\`\`\`
 
----
+**---**
 
-# Requirements
+**# Requirements**
 
 The deployment environment uses pinned versions to keep the saved preprocessing pipeline compatible:
 
-```text
+\`\`\`text
 streamlit==1.61.1
 pandas==2.3.3
 numpy==2.2.6
 joblib==1.5.3
 scikit-learn==1.6.1
-```
+\`\`\`
 
-XGBoost was used during model experimentation but is not required by the final Streamlit application.
+XGBoost is required by the final Streamlit application because the deployed model is an XGBoost Regressor.
 
----
+**---**
 
-# Running the Project Locally
+**# Running the Project Locally**
 
-## 1. Clone the repository
+**## 1. Clone the repository**
 
-```bash
-git clone <YOUR-GITHUB-REPOSITORY-URL>
-cd Rossmann_Sales_Forecasting
-```
+\`\`\`bash
+git clone \<YOUR-GITHUB-REPOSITORY-URL>
+cd Rossmann\_Sales\_Forecasting
+\`\`\`
 
-## 2. Create a virtual environment
+**## 2. Create a virtual environment**
 
-```bash
+\`\`\`bash
 python -m venv venv
-```
+\`\`\`
 
 Activate it on Windows:
 
-```bash
+\`\`\`bash
 venv\Scriptsctivate
-```
+\`\`\`
 
-## 3. Install dependencies
+**## 3. Install dependencies**
 
-```bash
+\`\`\`bash
 pip install -r requirements.txt
-```
+\`\`\`
 
-## 4. Run the Streamlit application
+**## 4. Run the Streamlit application**
 
-```bash
+\`\`\`bash
 streamlit run app.py
-```
+\`\`\`
 
 Or:
 
-```bash
+\`\`\`bash
 python -m streamlit run app.py
-```
+\`\`\`
 
----
+**---**
 
-# A Note About the Model File
+**# A Note About the Model File**
 
-The compressed model is approximately **1.17 GB**.
+The final deployment XGBoost model is approximately **\*\*1.43 MB\*\***.
 
-Because of its size, it should not be treated like a normal small GitHub source file. A production deployment should use appropriate large-file or external model-storage infrastructure rather than committing a multi-gigabyte model directly to a normal Git repository.
+This is dramatically smaller than the original Random Forest artifact, which was approximately **\*\*6.42 GB\*\*** before compression and approximately **\*\*1.17 GB\*\*** after Joblib compression.
 
-The repository structure therefore separates the model artifacts from the application source code.
+The small XGBoost artifact makes it practical to package with the application and load during Streamlit startup.
 
----
+This model-size difference was a major factor in the final deployment decision.
 
-# My Learning Journey
+**---**
+
+**# My Learning Journey**
 
 I started this project with the goal of building a practical sales forecasting model.
 
@@ -524,105 +530,111 @@ The project did not go perfectly from the first cell to the final application.
 
 It went through:
 
-**experiment → failure → investigation → correction → validation → deployment**
+**\*\*experiment → failure → investigation → correction → validation → deployment\*\***
 
 And that is exactly what I wanted from a hands-on machine learning project.
 
----
+**---**
 
-# What I Learned
+**# What I Learned**
 
-This project taught me much more than how to call `RandomForestRegressor`.
+This project taught me much more than how to call \`RandomForestRegressor\`.
 
-### 1. Forecasting is different from ordinary regression
+**### 1. Forecasting is different from ordinary regression**
 
 A model can achieve an impressive score by using information that will not actually exist when making a future prediction.
 
 That distinction matters.
 
-### 2. Validation strategy matters
+**### 2. Validation strategy matters**
 
 Random cross-validation can give misleading results when time order matters.
 
 For forecasting, the validation setup should resemble the real future prediction scenario.
 
-### 3. The best metric does not always mean the best model
+**### 3. The best metric does not always mean the best model**
 
 The model with MAE 538.72 was not selected for the final forecasting pipeline because it depended on historical Sales features that were not safely available for the official future test period.
 
-### 4. Hyperparameter tuning can make things worse
+**### 4. Hyperparameter tuning can make things worse**
 
 The tuned Random Forest did not beat the original forecast-ready model.
 
 More tuning does not automatically mean a better model.
 
-### 5. Deployment is part of machine learning
+**### 5. Deployment is part of machine learning**
 
 The 6.42 GB model forced me to think about:
 
-- serialization
-- compression
-- memory
-- dependency versions
-- model portability
-- application startup time
+\- serialization
+\- compression
+\- memory
+\- dependency versions
+\- model portability
+\- application startup time
 
 Those problems do not appear when you only work inside a notebook.
 
-### 6. Failed experiments are useful
+**### 6. Failed experiments are useful**
 
 The smaller Random Forest, XGBoost, HistGradientBoosting, tuning attempts, compression experiment, and dependency mismatch were not simply wasted attempts.
 
 They helped answer a practical question:
 
-> **What actually works when the model has to leave the notebook and become an application?**
+\> **\*\*What actually works when the model has to leave the notebook and become an application?\*\***
 
----
+**---**
 
-# Final Takeaway
+**# Final Takeaway**
 
 The final result is not just a notebook containing a trained Random Forest.
 
 It is an end-to-end forecasting project that demonstrates:
 
-- data preparation
-- feature engineering
-- time-aware validation
-- model comparison
-- model evaluation
-- interpretability
-- error analysis
-- forecasting constraints
-- deployment engineering
-- environment reproducibility
-- Streamlit application development
+\- data preparation
+\- feature engineering
+\- time-aware validation
+\- model comparison
+\- model evaluation
+\- interpretability
+\- error analysis
+\- forecasting constraints
+\- deployment engineering
+\- environment reproducibility
+\- Streamlit application development
 
-The selected forecast-ready Random Forest achieved approximately **916.97 MAE** on the chronological holdout and was successfully integrated into a local Streamlit application.
+The final deployment XGBoost model achieved approximately **\*\*1603.74 MAE\*\*** on the chronological holdout and was successfully integrated into the Streamlit application.
+
+Although this MAE is higher than the **\*\*916.97\*\*** achieved by the forecast-ready Random Forest, the Random Forest was not practical for the target deployment environment because of its extremely large model footprint and runtime memory requirements.
+
+The XGBoost model was approximately **\*\*1.43 MB\*\***, making it dramatically more practical to package, load, and serve.
+
+This is an important real-world ML lesson: **the best model on a validation metric is not necessarily the best model for production deployment.**
 
 The biggest lesson was that building the model is only one part of the job.
 
 Getting that model to behave correctly outside the notebook is another.
 
----
+**---**
 
-## Future Improvements
+**## Future Improvements**
 
 Possible next steps include:
 
-- Reduce the model footprint further without a major accuracy loss
-- Use dedicated model storage for large artifacts
-- Optimize inference memory usage
-- Add batch prediction support
-- Add prediction confidence or uncertainty estimates
-- Add historical sales visualization
-- Add store-level analytics
-- Add automated retraining
-- Add monitoring for model drift
-- Deploy using a production-oriented model-serving architecture
+\- Reduce the model footprint further without a major accuracy loss
+\- Use dedicated model storage for large artifacts
+\- Optimize inference memory usage
+\- Add batch prediction support
+\- Add prediction confidence or uncertainty estimates
+\- Add historical sales visualization
+\- Add store-level analytics
+\- Add automated retraining
+\- Add monitoring for model drift
+\- Deploy using a production-oriented model-serving architecture
 
----
+**---**
 
-## Author
+**## Author**
 
 Built as a hands-on machine learning and deployment learning project.
 
